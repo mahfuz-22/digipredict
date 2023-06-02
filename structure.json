@@ -1,0 +1,23 @@
+{
+    "Basic Info": {
+        "Gender": ""
+    },
+    "Calendar": {
+        "date": {
+            "Hailie": {
+                "Completed": false,
+                "Due time": ""
+            },
+            "RespiTrak": {
+                "Completed": false,
+                "Due time": ""
+            }
+        }
+    },
+    "Questionnaires": {
+        "Asthma Attack": {
+            "Record": {}
+        }
+    },
+    "Location": {}
+}
