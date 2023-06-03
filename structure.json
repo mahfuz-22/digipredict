@@ -11,6 +11,10 @@
             "RespiTrak": {
                 "Completed": false,
                 "Due time": ""
+            },
+            "Cough Monitor": {
+                "Completed": false,
+                "Due time": ""
             }
         }
     },

@@ -34,13 +34,24 @@ def onBoardParticipant(email: str, password: str, userInfo: dict, questionnaireI
     for date, x in [[(userInfo["start_date"] + timedelta(days=x)), x] for x in range(int(userInfo["time_frame"]))]:
         data = deepcopy(calendar)
         for key in data.keys():
-            data[key]["Due time"] = date.astimezone()
+            match key:
+                case "Cough Monitor":
+                    data[key]["Due time"] = (datetime.combine(
+                        date, userInfo["CoughMonitorTaskTime"])).astimezone()
+                case "Hailie":
+                    data[key]["Due time"] = (datetime.combine(
+                        date, userInfo["HailieTaskTime"])).astimezone()
+                case "RespiTrak":
+                    data[key]["Due time"] = (datetime.combine(
+                        date, userInfo["RespiTrakTaskTime"])).astimezone()
+                case _:
+                    data[key]["Due time"] = date.astimezone()
 
         if questionnaireCount >= questionnaireInfo["frequency"]:
             questionnaireCount = 1
             data |= {"Questionnaire": {
                 "Completed": False,
-                "Due time": (datetime.combine(date.date(), questionnaireInfo["time"])).astimezone(),
+                "Due time": (datetime.combine(date, questionnaireInfo["time"])).astimezone(),
                 "Link": questionnaireInfo["link"]
             }}
         else:
@@ -70,14 +81,23 @@ if __name__ == "__main__":
         email = st.text_input("Email")
         password = st.text_input("Password", type="password")
 
-        gender = st.selectbox("Gender", ("Female", "Male"))
+        gender = st.selectbox("Sex at Birth", ("Female", "Male"))
         startDate = st.date_input("Start Date")
-        morningTaskTime = st.time_input(
-            "Morning Task Time", value=time(8, 30, 0), step=60*5)
-        timeFrame = st.slider("Time Frame (months)",
-                              min_value=1, max_value=12, value=6, step=1)
+
+        hailieTaskTime = st.time_input(
+            "Hailie Task Time", value=time(8, 30, 0), step=60*5)
+
+        respiTrakTaskTime = st.time_input(
+            "RespiTrak Task Time", value=time(8, 30, 0), step=60*5)
+
+        coughMonitorTaskTime = st.time_input(
+            "Cough Monitor Task Time", value=time(21, 00, 0), step=60*5)
+
         questionnaireTime = st.time_input(
             "Questionnaire Time", value=time(18, 30, 0), step=60*5)
+
+        timeFrame = st.slider("Time Frame (months)",
+                              min_value=1, max_value=12, value=6, step=1)
 
         submit_button = st.form_submit_button(label="Submit")
         if submit_button:
@@ -87,7 +107,10 @@ if __name__ == "__main__":
             else:
                 usrInfo = {
                     "Gender": gender,
-                    "start_date": datetime.combine(startDate, morningTaskTime),
+                    "start_date": startDate,
+                    "HailieTaskTime": hailieTaskTime,
+                    "RespiTrakTaskTime": respiTrakTaskTime,
+                    "CoughMonitorTaskTime": coughMonitorTaskTime,
                     "time_frame": (timeFrame * 31) - 3,
                 }
 
