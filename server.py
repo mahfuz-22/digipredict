@@ -4,11 +4,6 @@ import streamlit as st
 from datetime import time, datetime, timedelta
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
-'''
-#
-# BUG: Questionnaire due date is on the day after as well as time offset of 12hrs
-#
-#'''
 
 
 @st.cache_resource
@@ -27,7 +22,7 @@ def onBoardParticipant(email: str, password: str, userInfo: dict, questionnaireI
     except ValueError:
         return "Invalid email or password"
 
-    # Create user
+    # # Create user
     try:
         user = auth.create_user(email=email, password=password)
     except ValueError as e:
@@ -39,13 +34,13 @@ def onBoardParticipant(email: str, password: str, userInfo: dict, questionnaireI
     for date, x in [[(userInfo["start_date"] + timedelta(days=x)), x] for x in range(int(userInfo["time_frame"]))]:
         data = deepcopy(calendar)
         for key in data.keys():
-            data[key]["Due time"] = date
+            data[key]["Due time"] = date.astimezone()
 
         if questionnaireCount >= questionnaireInfo["frequency"]:
-            questionnaireCount = 0
+            questionnaireCount = 1
             data |= {"Questionnaire": {
                 "Completed": False,
-                "Due time": date.replace(hour=questionnaireInfo["time"].hour, minute=questionnaireInfo["time"].minute, second=questionnaireInfo["time"].second),
+                "Due time": (datetime.combine(date.date(), questionnaireInfo["time"])).astimezone(),
                 "Link": questionnaireInfo["link"]
             }}
         else:
@@ -93,7 +88,7 @@ if __name__ == "__main__":
                 usrInfo = {
                     "Gender": gender,
                     "start_date": datetime.combine(startDate, morningTaskTime),
-                    "time_frame": timeFrame * 30,
+                    "time_frame": (timeFrame * 31) - 3,
                 }
 
                 questionnaireInfo = {
