@@ -96,6 +96,9 @@ if __name__ == "__main__":
         questionnaireTime = st.time_input(
             "Questionnaire Time", value=time(18, 30, 0), step=60*5)
 
+        # questionnaireLink with error checking for web link
+        questionnaireLink = st.text_input("Questionnaire Link")
+
         timeFrame = st.slider("Time Frame (months)",
                               min_value=1, max_value=12, value=6, step=1)
 
@@ -117,7 +120,7 @@ if __name__ == "__main__":
                 questionnaireInfo = {
                     "time": questionnaireTime,
                     "frequency": 14,
-                    "link": "https://binarypiano.com/"
+                    "link": questionnaireLink  # https://binarypiano.com
                 }
 
                 with open("structure.json", "r") as f:
