@@ -5,19 +5,51 @@
     "Calendar": {
         "date": {
             "Hailie": {
-                "Completed": false,
-                "Due time": ""
-            },
-            "RespiTrak": {
-                "Completed": false,
-                "Due time": ""
+                "Completed": false
             },
             "Cough Monitor": {
-                "Completed": false,
-                "Due time": ""
+                "Completed": false
             }
         }
     },
+    "Notifications" : {
+        "Monday" : {
+            "Hailie" : "",
+            "Cough Monitor" : "",
+            "Questionnaires" : ""
+        },
+        "Tuesday" : {
+            "Hailie" : "",
+            "Cough Monitor" : "",
+            "Questionnaires" : ""
+        },
+        "Wednesday" : {
+            "Hailie" : "",
+            "Cough Monitor" : "",
+            "Questionnaires" : ""
+        },
+        "Thursday" : {
+            "Hailie" : "",
+            "Cough Monitor" : "",
+            "Questionnaires" : ""
+        },
+        "Friday" : {
+            "Hailie" : "",
+            "Cough Monitor" : "",
+            "Questionnaires" : ""
+        },
+        "Saturday" : {
+            "Hailie" : "",
+            "Cough Monitor" : "",
+            "Questionnaires" : ""
+        },
+        "Sunday" : {
+            "Hailie" : "",
+            "Cough Monitor" : "",
+            "Questionnaires" : ""
+        }
+    },
+
     "Questionnaires": {
         "Asthma Attack": {
             "Record": {}

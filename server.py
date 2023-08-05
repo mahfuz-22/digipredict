@@ -33,25 +33,11 @@ def onBoardParticipant(email: str, password: str, userInfo: dict, questionnaireI
     questionnaireCount = 14
     for date, x in [[(userInfo["start_date"] + timedelta(days=x)), x] for x in range(int(userInfo["time_frame"]))]:
         data = deepcopy(calendar)
-        for key in data.keys():
-            match key:
-                case "Cough Monitor":
-                    data[key]["Due time"] = (datetime.combine(
-                        date, userInfo["CoughMonitorTaskTime"])).astimezone()
-                case "Hailie":
-                    data[key]["Due time"] = (datetime.combine(
-                        date, userInfo["HailieTaskTime"])).astimezone()
-                case "RespiTrak":
-                    data[key]["Due time"] = (datetime.combine(
-                        date, userInfo["RespiTrakTaskTime"])).astimezone()
-                case _:
-                    data[key]["Due time"] = date.astimezone()
 
         if questionnaireCount >= questionnaireInfo["frequency"]:
             questionnaireCount = 1
             data |= {"Questionnaire": {
                 "Completed": False,
-                "Due time": (datetime.combine(date, questionnaireInfo["time"])).astimezone(),
                 "Link": questionnaireInfo["link"]
             }}
         else:
@@ -59,9 +45,22 @@ def onBoardParticipant(email: str, password: str, userInfo: dict, questionnaireI
 
         structure["Calendar"] |= {date.strftime("%Y-%m-%d"): deepcopy(data)}
 
+        for Day in structure["Notifications"]:
+            # print(Day)
+            for task in structure["Notifications"][Day]:
+
+                if task == "Questionnaires":
+                    structure["Notifications"][Day][task] = datetime.strptime(
+                        "2000-01-01 " + questionnaireInfo["time"].strftime("%H:%M:%S"), "%Y-%m-%d %H:%M:%S").astimezone()
+                else:
+                    structure["Notifications"][Day][task] = datetime.strptime(
+                        "2000-01-01 " + userInfo[task+"TaskTime"].strftime("%H:%M:%S"), "%Y-%m-%d %H:%M:%S").astimezone()
+
     db = firestore.client()
     for key in structure.keys():
         db.collection(user.uid).document(key).set(structure[key])
+
+    # print(json.dumps(structure, indent=2))
 
     return ""
 
@@ -87,9 +86,6 @@ if __name__ == "__main__":
         hailieTaskTime = st.time_input(
             "Hailie Task Time", value=time(8, 30, 0), step=60*5)
 
-        respiTrakTaskTime = st.time_input(
-            "RespiTrak Task Time", value=time(8, 30, 0), step=60*5)
-
         coughMonitorTaskTime = st.time_input(
             "Cough Monitor Task Time", value=time(21, 00, 0), step=60*5)
 
@@ -112,8 +108,7 @@ if __name__ == "__main__":
                     "Gender": gender,
                     "start_date": startDate,
                     "HailieTaskTime": hailieTaskTime,
-                    "RespiTrakTaskTime": respiTrakTaskTime,
-                    "CoughMonitorTaskTime": coughMonitorTaskTime,
+                    "Cough MonitorTaskTime": coughMonitorTaskTime,
                     "time_frame": (timeFrame * 31) - 3,
                 }
 
