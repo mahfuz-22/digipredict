@@ -49,7 +49,7 @@ def onBoardParticipant(email: str, password: str, userInfo: dict, questionnaireI
             # print(Day)
             for task in structure["Notifications"][Day]:
 
-                if task == "Questionnaires":
+                if task == "Questionnaire":
                     structure["Notifications"][Day][task] = datetime.strptime(
                         "2000-01-01 " + questionnaireInfo["time"].strftime("%H:%M:%S"), "%Y-%m-%d %H:%M:%S").astimezone()
                 else:
