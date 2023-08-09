@@ -10,43 +10,52 @@
             "Cough Monitor": {
                 "Completed": false
             }
+            "CheckIn": {
+                "Completed": false
         }
     },
     "Notifications" : {
         "Monday" : {
             "Hailie" : "",
             "Cough Monitor" : "",
-            "Questionnaire" : ""
+            "Questionnaire" : "",
+            "CheckIn": ""
         },
         "Tuesday" : {
             "Hailie" : "",
             "Cough Monitor" : "",
-            "Questionnaire" : ""
+            "Questionnaire" : "",
+            "CheckIn": ""
         },
         "Wednesday" : {
             "Hailie" : "",
             "Cough Monitor" : "",
-            "Questionnaire" : ""
+            "Questionnaire" : "",
+            "CheckIn": ""
         },
         "Thursday" : {
             "Hailie" : "",
             "Cough Monitor" : "",
-            "Questionnaire" : ""
+            "Questionnaire" : "",
+            "CheckIn": ""
         },
         "Friday" : {
             "Hailie" : "",
             "Cough Monitor" : "",
-            "Questionnaire" : ""
+            "Questionnaire" : "",
+            "CheckIn": ""
         },
         "Saturday" : {
             "Hailie" : "",
             "Cough Monitor" : "",
-            "Questionnaire" : ""
+            "Questionnaire" : "",
+            "CheckIn": ""
         },
         "Sunday" : {
             "Hailie" : "",
             "Cough Monitor" : "",
-            "Questionnaire" : ""
+            "Questionnaire" : "",
+            "CheckIn": ""
         }
     },
 
