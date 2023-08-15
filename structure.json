@@ -9,9 +9,10 @@
             },
             "Cough Monitor": {
                 "Completed": false
-            }
+            },
             "CheckIn": {
                 "Completed": false
+            }
         }
     },
     "Notifications" : {

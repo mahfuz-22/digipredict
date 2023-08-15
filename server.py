@@ -83,6 +83,9 @@ if __name__ == "__main__":
         gender = st.selectbox("Sex at Birth", ("Female", "Male"))
         startDate = st.date_input("Start Date")
 
+        checkinTaskTime = st.time_input(
+            "Checkin Task Time", value=time(8, 0, 0), step=60*5)
+
         hailieTaskTime = st.time_input(
             "Hailie Task Time", value=time(8, 30, 0), step=60*5)
 
@@ -107,6 +110,7 @@ if __name__ == "__main__":
                 usrInfo = {
                     "Gender": gender,
                     "start_date": startDate,
+                    "CheckInTaskTime": checkinTaskTime,
                     "HailieTaskTime": hailieTaskTime,
                     "Cough MonitorTaskTime": coughMonitorTaskTime,
                     "time_frame": (timeFrame * 31) - 3,
