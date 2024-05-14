@@ -87,19 +87,19 @@ if __name__ == "__main__":
             "Checkin Task Time", value=time(8, 0, 0), step=60*5)
 
         hailieTaskTime = st.time_input(
-            "Hailie Task Time", value=time(8, 30, 0), step=60*5)
+            "Hailie Task Time", value=time(8, 0, 0), step=60*5)
 
         coughMonitorTaskTime = st.time_input(
-            "Cough Monitor Task Time", value=time(21, 00, 0), step=60*5)
+            "Cough Monitor Task Time", value=time(22, 00, 0), step=60*5)
 
         questionnaireTime = st.time_input(
-            "Questionnaire Time", value=time(18, 30, 0), step=60*5)
+            "Questionnaire Time", value=time(20, 00, 0), step=60*5)
 
         # questionnaireLink with error checking for web link
         questionnaireLink = st.text_input("Questionnaire Link")
 
         timeFrame = st.slider("Time Frame (months)",
-                              min_value=1, max_value=12, value=6, step=1)
+                              min_value=1, max_value=12, value=7, step=1)
 
         submit_button = st.form_submit_button(label="Submit")
         if submit_button:
