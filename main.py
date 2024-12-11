@@ -52,7 +52,7 @@ def authenticate():
                 st.error("Invalid credentials")
     
     return False
-
+'''
 @st.cache_resource
 def init_firebase():
     """Initialize Firebase with credentials from secrets"""
@@ -60,6 +60,37 @@ def init_firebase():
         # Get Firebase credentials from secrets
         cred = credentials.Certificate(st.secrets["firebase"])
         firebase_admin.initialize_app(cred)
+'''
+
+@st.cache_resource
+def init_firebase():
+    """Initialize Firebase with credentials from secrets"""
+    try:
+        if not firebase_admin._apps:
+            # Get Firebase credentials and print structure (without sensitive data)
+            firebase_creds = dict(st.secrets["firebase"])
+            st.write("Firebase credentials keys:", list(firebase_creds.keys()))
+            
+            # Verify required fields
+            required_fields = [
+                "type", "project_id", "private_key_id", "private_key",
+                "client_email", "client_id", "auth_uri", "token_uri",
+                "auth_provider_x509_cert_url", "client_x509_cert_url"
+            ]
+            missing_fields = [field for field in required_fields if field not in firebase_creds]
+            
+            if missing_fields:
+                st.error(f"Missing required fields: {missing_fields}")
+                return
+            
+            cred = credentials.Certificate(firebase_creds)
+            firebase_admin.initialize_app(cred)
+            st.success("Firebase initialized successfully!")
+    except Exception as e:
+        st.error(f"Firebase initialization error: {str(e)}")
+        st.error(f"Error type: {type(e)}")
+        raise
+
 
 def show_navigation():
     """Display navigation after successful login"""
@@ -79,32 +110,43 @@ def show_navigation():
             st.rerun()
 
 def main():
-    init_session_state()
-    init_firebase()
-    
-    # Show logout in sidebar if authenticated
-    if st.session_state.authenticated:
-        with st.sidebar:
-            if st.button("🔙 Back to Main Menu"):
-                st.session_state.current_app = None
-                st.rerun()
-            if st.button("🚪 Logout"):
-                st.session_state.clear()
-                st.rerun()
+    try:
+        init_session_state()
+        init_firebase()
+        
+        # Show logout in sidebar if authenticated
+        if st.session_state.authenticated:
+            with st.sidebar:
+                if st.button("🔙 Back to Main Menu"):
+                    st.session_state.current_app = None
+                    st.rerun()
+                if st.button("🚪 Logout"):
+                    st.session_state.clear()
+                    st.rerun()
 
-    # Check authentication
-    if not authenticate():
-        return
+        # Check authentication
+        if not authenticate():
+            return
 
-    # Show navigation or selected app
-    if st.session_state.current_app is None:
-        show_navigation()
-    elif st.session_state.current_app == 'server':
-        import server
-        server.main()
-    elif st.session_state.current_app == 'modify':
-        import modify
-        modify.main()
+        # Show navigation or selected app
+        if st.session_state.current_app is None:
+            show_navigation()
+        elif st.session_state.current_app == 'server':
+            import server
+            server.main()
+        elif st.session_state.current_app == 'modify':
+            import modify
+            modify.main()
+
+    except Exception as e:
+            st.error(f"Application error: {str(e)}")
+            st.error(f"Error type: {type(e)}")
+            
+            # Print the secrets structure (without actual values)
+            if 'firebase' in st.secrets:
+                st.write("Firebase config keys:", list(st.secrets["firebase"].keys()))
+            else:
+                st.error("Firebase configuration not found in secrets!")            
 
 if __name__ == "__main__":
     main()
