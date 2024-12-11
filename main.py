@@ -56,11 +56,33 @@ def authenticate():
 @st.cache_resource
 def init_firebase():
     """Initialize Firebase with credentials from secrets"""
+    try:
+        if not firebase_admin._apps:
+            # Get Firebase credentials from secrets
+            firebase_creds = dict(st.secrets["firebase"])
+            
+            # Ensure private_key is properly formatted
+            if 'private_key' in firebase_creds:
+                key = firebase_creds['private_key']
+                if not key.startswith('-----BEGIN PRIVATE KEY-----'):
+                    firebase_creds['private_key'] = f"-----BEGIN PRIVATE KEY-----\n{key}\n-----END PRIVATE KEY-----\n"
+            
+            cred = credentials.Certificate(firebase_creds)
+            firebase_admin.initialize_app(cred)
+    except Exception as e:
+        st.error("Failed to initialize Firebase. Please check your credentials configuration.")
+        raise
+
+'''
+@st.cache_resource
+def init_firebase():
+    """Initialize Firebase with credentials from secrets"""
     if not firebase_admin._apps:
         # Get Firebase credentials from secrets
         cred = credentials.Certificate(st.secrets["firebase"])
         firebase_admin.initialize_app(cred)
-
+'''
+        
 '''
 @st.cache_resource
 def init_firebase():
