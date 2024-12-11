@@ -73,47 +73,6 @@ def init_firebase():
         st.error("Failed to initialize Firebase. Please check your credentials configuration.")
         raise
 
-'''
-@st.cache_resource
-def init_firebase():
-    """Initialize Firebase with credentials from secrets"""
-    if not firebase_admin._apps:
-        # Get Firebase credentials from secrets
-        cred = credentials.Certificate(st.secrets["firebase"])
-        firebase_admin.initialize_app(cred)
-'''
-        
-'''
-@st.cache_resource
-def init_firebase():
-    """Initialize Firebase with credentials from secrets"""
-    try:
-        if not firebase_admin._apps:
-            # Get Firebase credentials and print structure (without sensitive data)
-            firebase_creds = dict(st.secrets["firebase"])
-            st.write("Firebase credentials keys:", list(firebase_creds.keys()))
-            
-            # Verify required fields
-            required_fields = [
-                "type", "project_id", "private_key_id", "private_key",
-                "client_email", "client_id", "auth_uri", "token_uri",
-                "auth_provider_x509_cert_url", "client_x509_cert_url"
-            ]
-            missing_fields = [field for field in required_fields if field not in firebase_creds]
-            
-            if missing_fields:
-                st.error(f"Missing required fields: {missing_fields}")
-                return
-            
-            cred = credentials.Certificate(firebase_creds)
-            firebase_admin.initialize_app(cred)
-            st.success("Firebase initialized successfully!")
-    except Exception as e:
-        st.error(f"Firebase initialization error: {str(e)}")
-        st.error(f"Error type: {type(e)}")
-        raise
-'''
-
 def show_navigation():
     """Display navigation after successful login"""
     st.title("DigiPredict Admin Portal")
