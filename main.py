@@ -98,9 +98,12 @@ def main():
     # Show logout in sidebar if authenticated
     if st.session_state.authenticated:
         with st.sidebar:
-            if st.button("🔙 Back to Main Menu"):
-                st.session_state.current_app = None
-                st.rerun()
+            # Only show Back to Main Menu if we're in a sub-app
+            if st.session_state.current_app is not None:
+                if st.button("🔙 Back to Main Menu"):
+                    st.session_state.current_app = None
+                    st.rerun()
+            # Always show logout when authenticated
             if st.button("🚪 Logout"):
                 st.session_state.clear()
                 st.rerun()
