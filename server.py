@@ -51,15 +51,31 @@ def onBoardParticipant(email: str, password: str, userInfo: dict, questionnaireI
         for Day in structure["Notifications"]:
             for task in structure["Notifications"][Day]:
                 if task == "Questionnaire":
+                    # First create the naive datetime
+                    naive_dt = datetime.strptime(
+                        "2000-01-01 " + questionnaireInfo["time"].strftime("%H:%M:%S"), 
+                        "%Y-%m-%d %H:%M:%S"
+                    )
+                    # Then localize it to NZ timezone
+                    structure["Notifications"][Day][task] = NZ_TIMEZONE.localize(naive_dt)
+                    '''
                     structure["Notifications"][Day][task] = datetime.strptime(
                         "2000-01-01 " + questionnaireInfo["time"].strftime("%H:%M:%S"), 
                         "%Y-%m-%d %H:%M:%S"
-                    ).astimezone(NZ_TIMEZONE)
+                    ).astimezone(NZ_TIMEZONE)'''
                 else:
+                    # First create the naive datetime
+                    naive_dt = datetime.strptime(
+                        "2000-01-01 " + userInfo[task+"TaskTime"].strftime("%H:%M:%S"), 
+                        "%Y-%m-%d %H:%M:%S"
+                    )
+                    # Then localize it to NZ timezone
+                    structure["Notifications"][Day][task] = NZ_TIMEZONE.localize(naive_dt)
+                    '''
                     structure["Notifications"][Day][task] = datetime.strptime(
                         "2000-01-01 " + userInfo[task+"TaskTime"].strftime("%H:%M:%S"), 
                         "%Y-%m-%d %H:%M:%S"
-                    ).astimezone(NZ_TIMEZONE)
+                    ).astimezone(NZ_TIMEZONE)'''
 
     db = firestore.client()
     for key in structure.keys():
