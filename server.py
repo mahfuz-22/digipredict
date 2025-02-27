@@ -1,3 +1,4 @@
+import pytz
 from copy import deepcopy
 import json
 import streamlit as st
@@ -45,18 +46,20 @@ def onBoardParticipant(email: str, password: str, userInfo: dict, questionnaireI
 
         structure["Calendar"] |= {date.strftime("%Y-%m-%d"): deepcopy(data)}
 
+        NZ_TIMEZONE = pytz.timezone('Pacific/Auckland')
+
         for Day in structure["Notifications"]:
             for task in structure["Notifications"][Day]:
                 if task == "Questionnaire":
                     structure["Notifications"][Day][task] = datetime.strptime(
                         "2000-01-01 " + questionnaireInfo["time"].strftime("%H:%M:%S"), 
                         "%Y-%m-%d %H:%M:%S"
-                    ).astimezone()
+                    ).astimezone(NZ_TIMEZONE)
                 else:
                     structure["Notifications"][Day][task] = datetime.strptime(
                         "2000-01-01 " + userInfo[task+"TaskTime"].strftime("%H:%M:%S"), 
                         "%Y-%m-%d %H:%M:%S"
-                    ).astimezone()
+                    ).astimezone(NZ_TIMEZONE)
 
     db = firestore.client()
     for key in structure.keys():
